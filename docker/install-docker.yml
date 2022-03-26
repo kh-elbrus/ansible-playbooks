@@ -1,0 +1,51 @@
+---
+- name: Install Docker into RedHat & Debian based servers
+  hosts: all
+  become: yes
+
+  tasks:
+    - block:
+      - name: install docker into RedHat
+        yum: name=docker state=latest
+      - name: start & enable the docker
+        service: name=docker state=started enabled=yes
+      - name: install docker-compose
+        get_url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: 'u+x,g+x'
+        command: 'ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose'
+      when: ansible_os_family == "RedHat"
+
+    - block:
+      - name: install requirements for installing docker into Debian
+        apt:
+          pkg:
+            - ca-certificates
+            - curl
+            - gnupg
+            - lsb-release
+            - apt-transport-https
+            - python3-pip
+            - python3-setuptools
+            - python3-docker
+          state: latest
+          update_cache: true
+      - name: add docker gpg apt key
+        apt_key:
+          url: https://download.docker.com/linux/ubuntu/gpg
+          state: present
+
+      - name: add docker repo
+        apt_repository:
+          repo: deb https://download.docker.com/linux/ubuntu focal stable
+          state: present
+
+      - name: update & install docker
+        apt: name=docker-ce state=latest update_cache=true
+      
+      - name: install docker-compose
+        get_url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: 'u+x,g+x'
+        command: 'ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose'
+      when: ansible_os_family == "Debian"

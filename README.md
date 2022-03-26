@@ -14,12 +14,12 @@
   
 ### Collection
 
-| № 	| Title 	| OS 	| Link 	|
-|:---:	|:---:	|:---:	|:---:	|
-| 1 	| Installing Docker 	| `Debian`,`RedHat` 	|  	|
-| 2 	| Installing ELK Stack 	| `Debian`,`RedHat` 	|  	|
-| 3 	| Installing Jenkins 	| `Debian`,`RedHat` 	|  	|
-| 4 	|  	|  	|  	|
-| 5 	|  	|  	|  	|
-| 6 	|  	|  	|  	|
-| 7 	|  	|  	|  	|
+|   №   |        Title         |        OS         |                  Link                   |
+| :---: | :------------------: | :---------------: | :-------------------------------------: |
+|   1   |  Installing Docker   | `Debian`,`RedHat` | [playbook](./docker/install-docker.yml) |
+|   2   | Installing ELK Stack | `Debian`,`RedHat` |                                         |
+|   3   |  Installing Jenkins  | `Debian`,`RedHat` |                                         |
+|   4   |                      |                   |                                         |
+|   5   |                      |                   |                                         |
+|   6   |                      |                   |                                         |
+|   7   |                      |                   |                                         |
