@@ -38,6 +38,6 @@
 |   2   |      Elasticsearch      | `Ubuntu 20.04`,`Centos 7` | [without docker](./elastic/elasticsearch/elasticsearch.yaml) |
 |   3   |         Kibana          | `Ubuntu 20.04`,`Centos 7` |        [without docker](./elastic/kibana/kibana.yaml)        |
 |   4   |        Logstash         | `Ubuntu 20.04`,`Centos 7` |      [without docker](./elastic/logstash/logstash.yaml)      |
-|   5   |        ELK-Stack        |                           |                                                              |
+|   5   |        ELK-Stack        | `Ubuntu 20.04`,`Centos 7` |     [without docker](./elastic/elk-stack/elk-stack.yaml)     |
 |   6   |                         |                           |                                                              |
 |   7   |                         |                           |                                                              |
