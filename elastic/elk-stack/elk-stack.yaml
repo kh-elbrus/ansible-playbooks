@@ -1,0 +1,75 @@
+---
+- name: 'ELK for Debian & RedHat based servers'
+  hosts: <YOUR-HOST-GROUP>
+  become: yes
+
+  tasks:
+    - block:
+      - name: 'Import the ELK GPG Key'
+        rpm_key:
+          state: present
+          key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+      - name: 'Add & update repository'
+        yum_repository:
+          name: elastic
+          description: ELK repository for 8.x packages
+          file: elastic
+          baseurl: https://artifacts.elastic.co/packages/8.x/yum
+          gpgcheck: yes
+          gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+          enabled: yes
+      - name: 'Install ELK'
+        yum:
+          update_cache: yes
+          name: 
+            - elasticsearch
+            - kibana
+            - logstash
+          state: latest
+      - name: 'Enable ELK'
+        systemd:
+          name: '{{ item }}.service'
+          enabled: yes
+          daemon_reload: yes
+        with_items:
+          - elasticsearch
+          - kibana
+          - logstash
+      when: ansible_os_family == "RedHat"
+
+    - block:
+      - name: 'Import the Logstash GPG Key'
+        apt_key:
+          url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+          state: present
+      - name: 'Installing dependencies'
+        apt:
+          pkg:
+            - ca-certificates
+            - curl
+            - apt-transport-https
+          state: latest
+          update_cache: true
+      - name: 'Add repository'
+        apt_repository:
+          repo: deb https://artifacts.elastic.co/packages/8.x/apt stable main
+          state: present
+      - name: 'Install ELK'
+        apt:
+          pkg:
+            - elasticsearch
+            - kibana
+            - logstash
+          state: latest
+          update_cache: true
+      - name: 'Enable ELK'
+        systemd:
+          name: '{{ item }}.service'
+          enabled: yes
+          daemon_reload: yes
+        with_items:
+          - elasticsearch
+          - kibana
+          - logstash
+      when: ansible_os_family == "Debian"
+

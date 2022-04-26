@@ -1,0 +1,61 @@
+---
+- name: 'Kibana for Debian & RedHat based servers'
+  hosts: <YOUR-HOSTS-GROUP>
+  become: yes
+
+  tasks:
+    - block:
+      - name: 'Import the Kibana GPG Key'
+        rpm_key:
+          state: present
+          key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+      - name: 'Add & update repository'
+        yum_repository:
+          name: kibana-8.x
+          description: Kibana repository for 8.x packages
+          file: kibana
+          baseurl: https://artifacts.elastic.co/packages/8.x/yum
+          gpgcheck: yes
+          gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+          enabled: yes
+      - name: 'Install kibana'
+        yum:
+          update_cache: yes
+          name: kibana
+          state: latest
+      - name: 'Enable kibana'
+        systemd:
+          name: kibana
+          enabled: yes
+          daemon_reload: yes
+      when: ansible_os_family == "RedHat"
+
+    - block:
+      - name: 'Import the Kibana GPG Key'
+        apt_key:
+          url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+          state: present
+      - name: 'Installing dependencies'
+        apt:
+          pkg:
+            - ca-certificates
+            - curl
+            - apt-transport-https
+          state: latest
+          update_cache: true
+      - name: 'Add repository'
+        apt_repository:
+          repo: deb https://artifacts.elastic.co/packages/8.x/apt stable main
+          state: present
+      - name: 'Install kibana'
+        apt:
+          name: kibana
+          state: latest
+          update_cache: yes
+      - name: 'Enable kibana'
+        systemd:
+          name: kibana
+          enabled: yes
+          daemon_reload: yes
+      when: ansible_os_family == "Debian"
+
