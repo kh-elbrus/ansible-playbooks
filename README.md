@@ -35,7 +35,7 @@
 |   №   |          Title          |          Tested           |                             Link                              |
 | :---: | :---------------------: | :-----------------------: | :-----------------------------------------------------------: |
 |   1   | Docker & Docker-Compose | `Ubuntu 20.04`,`Centos 7` |            [playbook](./docker/install-docker.yml)            |
-|   2   |      Elasticsearch      | `Ubuntu 20.04`,`Centos 7` | [without docker](./elastic/elasticsearch/elasticssearch.yaml) |
+|   2   |      Elasticsearch      | `Ubuntu 20.04`,`Centos 7` | [without docker](./elastic/elasticsearch/elasticsearch.yaml) |
 |   3   |         Kibana          | `Ubuntu 20.04`,`Centos 7` |        [without docker](./elastic/kibana/kibana.yaml)         |
 |   4   |        Logstash         |                           |                                                               |
 |   5   |        ELK-Stack        |                           |                                                               |
