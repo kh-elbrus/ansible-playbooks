@@ -1,0 +1,61 @@
+---
+- name: 'Logstash for Debian & RedHat based servers'
+  hosts: <YOUR-HOST-GROUP>
+  become: yes
+
+  tasks:
+    - block:
+      - name: 'Import the Logstash GPG Key'
+        rpm_key:
+          state: present
+          key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+      - name: 'Add & update repository'
+        yum_repository:
+          name: logstash-8.x
+          description: Elastic repository for 8.x packages
+          file: logstash
+          baseurl: https://artifacts.elastic.co/packages/8.x/yum
+          gpgcheck: yes
+          gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+          enabled: yes
+      - name: 'Install logstash'
+        yum:
+          update_cache: yes
+          name: logstash
+          state: latest
+      - name: 'Enable logstash'
+        systemd:
+          name: logstash
+          enabled: yes
+          daemon_reload: yes
+      when: ansible_os_family == "RedHat"
+
+    - block:
+      - name: 'Import the Logstash GPG Key'
+        apt_key:
+          url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+          state: present
+      - name: 'Installing dependencies'
+        apt:
+          pkg:
+            - ca-certificates
+            - curl
+            - apt-transport-https
+          state: latest
+          update_cache: true
+      - name: 'Add repository'
+        apt_repository:
+          repo: deb https://artifacts.elastic.co/packages/8.x/apt stable main
+          state: present
+      - name: 'Install logstash'
+        apt:
+          name: logstash
+          state: latest
+          update_cache: yes
+      - name: 'Enable logstash'
+        systemd:
+          name: logstash
+          enabled: yes
+          daemon_reload: yes
+      when: ansible_os_family == "Debian"
+
